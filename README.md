@@ -1,65 +1,58 @@
 # Prompt Library
 
-A curated collection of development rules and prompt templates for AI-assisted software development. Use these structured prompts to maintain consistency and quality when working with AI coding assistants.
+A curated collection of development rules and prompt templates for AI-assisted software development. Drop it into a project as a submodule and reference its rules and templates from your prompts to get consistent, opinionated output from AI coding assistants.
 
 ## Quick Start
 
 Add this library to your project as a git submodule:
 
 ```bash
-# Add the submodule to your project
 git submodule add https://github.com/yourusername/prompt-library.git prompts
-
-# Initialize and update the submodule
 git submodule update --init --recursive
 
-# In the future, update to latest rules
+# Later, pull updates
 git submodule update --remote prompts
 ```
 
-## What's Included
+## Contents
 
 ### Rules (`rules/`)
-Development standards and architectural patterns that AI assistants should follow:
 
-- **kotlin.md** - Functional Kotlin with Arrow FP patterns
-- **domain-driven-design.md** - DDD tactical and strategic patterns  
-- **hexagonal-architecture.md** - Ports & adapters implementation
-- **kotest.md** - Testing conventions with Kotest/Testcontainers
+Opinionated standards an assistant should follow when writing code. Each rule is self-contained and includes context (where it applies), core principles, MoSCoW-prioritised rules, patterns and anti-patterns, a decision framework, and a TL;DR.
 
-Rules provide structured guidance with:
-- Core principles and context
-- Tiered requirements (Must/Should/Could Have)
-- Code examples and anti-patterns
-- Decision frameworks for edge cases
+- `kotlin.md` — Functional Kotlin with Arrow (`Option<A>`, `Either<E,A>`, no nullable types)
+- `rust.md` — Modern idiomatic Rust (2025 practices)
+- `domain-driven-design.md` — DDD tactical and strategic patterns
+- `hexagonal-architecture.md` — Ports & adapters
+- `simple-design.md` — Beck/Fowler four rules of simple design (language-agnostic)
+- `kotest.md` — Kotest + Testcontainers conventions
+- `mcp-best-practices.md` — Designing and implementing MCP servers and clients
 
 ### Templates (`templates/`)
-Meta-prompting templates for common AI development tasks:
 
-- **00-rules-template.md** - Create new development rules
-- **00-oneshot_template.md** - Specify features for single-shot implementation
-- **00-todo_template.md** - Generate structured TODO lists from code comments
+Prompt scaffolds for common AI development tasks. Italicised paragraphs inside each template are instructions to the author — replace them with real content when filling the template in.
 
-Templates help you craft effective prompts by providing proven structures and ensuring you include all necessary context for AI assistants.
+- `00-ralph_api_template.md` — Feature spec for autonomous coding loops (behaviour, API contract, business rules, Gherkin examples, out-of-scope, acceptance criteria)
+- `00-mcp-server_template.md` — Prompt for building an MCP server feature/tool
+- `00-feature_spec_template.md` — Full feature specification (domain, schema, endpoints, access matrix, examples)
+- `00-implementation_plan_template.md` — Slice-by-slice plan derived from a spec
+- `00-backend-prompt-template.md` — Prompt for implementing a single backend slice
+- `00-frontend-prompt-template.md` — Prompt for implementing a single frontend slice
+- `00-todo-template.md` — Corrective-action TODO list generated from `TODO` comments
+- `00-rules-template.md` — Scaffold for adding a new rule to `rules/`
 
 ## Usage
 
 Reference rules in your prompts:
+
 ```
 Consider the following rules when implementing this feature:
 - prompts/rules/kotlin.md
 - prompts/rules/hexagonal-architecture.md
 ```
 
-Use templates to structure complex requests:
-```
-Using the template from prompts/templates/00-oneshot_template.md, 
-implement a user authentication system with the following requirements...
-```
+Use a template as the scaffold for a feature spec or prompt:
 
-## Benefits
-
-- **Consistency** - Standardized patterns across projects and team members
-- **Quality** - Battle-tested rules based on industry best practices  
-- **Efficiency** - Reusable templates reduce prompt engineering overhead
-- **Maintainability** - Centralized rules that evolve with your practices
+```
+Using prompts/templates/00-ralph_api_template.md, draft a spec for ...
+```

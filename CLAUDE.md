@@ -2,78 +2,35 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Repository Overview
+## Repository Purpose
 
-This is a **prompt library** containing structured rules and templates for software development, specifically focused on:
+A documentation-only library of **rules** and **templates** consumed by AI coding assistants. There is no build, no test suite, and nothing to run — every artefact is self-contained markdown intended to be referenced from other projects (typically as a git submodule named `prompts/`).
 
-- **Rules**: Development standards and architectural patterns (Kotlin, DDD, Hexagonal Architecture, Kotest testing)
-- **Templates**: Reusable templates for prompts, todos, and feature documentation
+## Layout
 
-The repository follows a document-centric approach where each rule and template is self-contained with clear guidance for AI assistants.
+- `rules/` — opinionated standards an assistant should follow when writing code (Kotlin, Rust, DDD, Hexagonal Architecture, Simple Design, Kotest, MCP best practices). The library is polyglot; rules apply where their `Applies to:` context says they apply.
+- `templates/` — prompt scaffolds for common AI development tasks (feature specs, implementation plans, backend/frontend slice prompts, MCP server prompts, ralph API specs, TODO lists, and a meta-template for authoring new rules). All templates are prefixed `00-`.
 
-## Architecture & Structure
+## Authoring Conventions
 
-### Directory Structure
-```
-rules/                    # Development rules and standards
-├── kotlin.md            # Functional Kotlin with Arrow FP patterns
-├── domain-driven-design.md  # DDD tactical and strategic patterns
-├── hexagonal-architecture.md  # Ports & adapters implementation
-└── kotest.md           # Testing conventions with Kotest/Testcontainers
+### Rules must follow `templates/00-rules-template.md` exactly
 
-templates/              # Reusable prompt templates
-├── 00-rules-template.md      # Template for creating new rules
-├── 00-oneshot_template.md   # Template for feature specifications
-└── 00-todo_template.md      # Template for TODO list generation
-```
+This is the most important convention in the repo. When adding or editing a file in `rules/`:
 
-### Key Patterns
+- Keep the file under ~200 lines to preserve context-window budget for consumers.
+- Use the prescribed sections: Context (`Applies to` / `Level` / `Audience`), Core Principles, Rules, Patterns & Anti-Patterns, Decision Framework, Exceptions & Waivers, Quality Gates, Related Rules, References, TL;DR. Omit a section only when it genuinely doesn't apply (e.g. Patterns & Anti-Patterns for a non-code rule).
+- Number rules `RULE-XXX` with the MoSCoW range: `001–099` Must Have, `101–199` Should Have, `201–299` Could Have.
+- Cross-link sibling rules in the **Related Rules** section.
+- The TL;DR must be readable in under 30 seconds.
 
-**Rules Structure**: All rules files follow the template pattern from `templates/00-rules-template.md`:
-- Context section defining scope and audience
-- Core principles (the "why" behind rules)
-- Tiered rules: Must Have (critical) → Should Have (important) → Could Have (preferred)
-- Patterns & Anti-patterns with concrete code examples
-- Decision framework for edge cases
-- Quality gates and related rules
+### Templates contain author-guidance in italics
 
-**Template Structure**: Templates provide scaffolding for:
-- Feature specifications with requirements and domain modeling
-- TODO list generation with structured task breakdown
-- Rules creation with consistent formatting
+Files in `templates/` are scaffolds, not finished documents. Italicised paragraphs (`*...*`) are instructions to the author and **must be replaced** when the template is used for a real task — they are not content to preserve. Headings and structural lists are the load-bearing parts.
 
-## Core Development Principles
+### Naming
 
-Based on the rules in this repository:
+Rules use plain hyphenated names (`mcp-best-practices.md`). Templates are prefixed `00-` and otherwise mix underscores and hyphens — match the style of the closest existing template rather than imposing a new convention.
 
-1. **Functional-First Kotlin**: Never use nullable types (`?`), always use Arrow's `Option<A>` and `Either<E,A>`
-2. **Hexagonal Architecture**: Domain logic isolated behind ports, adapters handle external integrations
-3. **Domain-Driven Design**: Rich domain models with ubiquitous language and bounded contexts
-4. **Outside-In Testing**: Acceptance → Integration → Unit test layers with Kotest and Testcontainers
+## When the Parent CLAUDE.md Applies
 
-## Common Development Tasks
-
-Since this is a documentation repository, there are no build commands, tests, or deployment processes. The primary activities are:
-
-- **Creating new rules**: Follow `templates/00-rules-template.md` structure
-- **Creating feature specifications**: Use `templates/00-oneshot_template.md` 
-- **Generating TODO lists**: Use `templates/00-todo_template.md` workflow
-- **Content validation**: Ensure rules follow the established patterns and include all required sections
-
-## Quality Standards
-
-When working with this repository:
-
-- **Consistency**: All rules must follow the template structure exactly
-- **Completeness**: Include all sections (Context, Core Principles, Rules, Patterns, etc.)
-- **Concrete Examples**: Provide both positive and anti-pattern code examples
-- **Cross-References**: Link related rules in the "Related Rules" section
-- **Actionable Guidance**: Rules should be specific enough to guide implementation decisions
-
-## Template Usage
-
-**For Rules**: Use the MoSCoW prioritization (Must/Should/Could Have) with numbered rules (RULE-001, RULE-101, RULE-201)
-
-**For Features**: Include measurable requirements, domain modeling, testing considerations, and verification checklists
-
-**For TODOs**: Structure tasks with checkboxes, clear prompts for AI execution, and affected files lists
+The parent `/home/marco/src/sdkman/CLAUDE.md` covers SDKMAN-wide concerns (NixOS, SDKMAN JDK selection, Docker for local DBs, MCP tooling preferences, secrets policy). Those rules apply to **other** SDKMAN projects but are largely irrelevant here — this repo has no JVM, no Docker, no databases, and no SBT. The git/filesystem/GitHub MCP preferences from the parent still apply when operating on this repo.
